@@ -26,16 +26,13 @@ build() {
 package() {
     cd "$startdir"
 
-    # Εγκατάσταση του παραγόμενου python package
     python -m installer --destdir="$pkgdir" dist/*.whl
 
-    # Δημιουργία φακέλων συστήματος
     install -d "$pkgdir/usr/share/applications"
     install -d "$pkgdir/etc/xdg/autostart"
     install -d "$pkgdir/usr/share/pixmaps"
     install -d "$pkgdir/usr/share/icons/hicolor/128x128/apps"
 
-    # Έλεγχος και εγκατάσταση εικονιδίου από το $startdir (χωρίς τυπογραφικά)
     if [ -f "$startdir/resources/unios.png" ]; then
         install -Dm644 "$startdir/resources/unios.png" "$pkgdir/usr/share/pixmaps/unidesk.png"
         install -Dm644 "$startdir/resources/unios.png" "$pkgdir/usr/share/icons/hicolor/128x128/apps/unidesk.png" 
@@ -45,7 +42,6 @@ package() {
         ICON="system-help"
     fi
 
-    # Δημιουργία .desktop
     cat << EOF > "$pkgdir/usr/share/applications/unidesk.desktop"
 [Desktop Entry]
 Type=Application
