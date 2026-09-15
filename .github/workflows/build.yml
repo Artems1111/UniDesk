@@ -40,8 +40,6 @@ jobs:
         makepkg -s --noconfirm
 
         mkdir -p output_package
-        mv ../UniDesk/ output_package/
-        mv ../pkg/ output_package/
         mv ../*.pkg.tar.zst output_package/
 
     - name: Upload All Package Artifacts
