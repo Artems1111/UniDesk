@@ -29,8 +29,11 @@ jobs:
 
     - name: Install Native Build Tools
       run: |
-        sudo pacman -Syyu --noconfirm
-        sudo pacman -S --noconfirm base-devel python python-setuptools ruff
+        pacman -Syyu --noconfirm
+        pacman -S --noconfirm base-devel python python-setuptools python-build python-installer python-wheel ruff
+        
+        useradd --create-home --shell /bin/bash builder
+    	chown -R builder:builder "$GITHUB_WORKSPACE"
         
     - name: Run Ruff Static Analysis
       run: ruff check src/unidesk/
@@ -38,10 +41,12 @@ jobs:
     
     - name: Build Arch Packages 
       run: |
-        makepkg -s --noconfirm
 
         mkdir -p output_package
-        mv ../*.pkg.tar.zst output_package/
+        chown builder:builder output_package
+
+        runuser -u builder -- makepkg --noconfirm
+        mv ./*.pkg.tar.zst output_package/
 
     - name: Upload All Package Artifacts
       uses: actions/upload-artifact@v4
